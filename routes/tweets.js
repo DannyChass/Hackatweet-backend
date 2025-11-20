@@ -24,7 +24,7 @@ router.post("/new", async (req, res) => {
 
     await newTweet.save();
 
-    res.json({ result: true, tweet: { id: newTweet._id, author: user.username, content: newTweet.content, data: newTweet.date } });
+    res.json({ result: true, tweet: { id: newTweet._id, author: user.username, content: newTweet.content, date: newTweet.date } });
 });
 
 router.delete("/delete/:tweetid", async (req, res) => {
