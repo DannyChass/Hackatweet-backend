@@ -38,7 +38,7 @@ router.delete("/delete/:tweetid", async (req, res) => {
     const user = await User.findOne({ token });
 
     if (!user) {
-        return res.status(400).json({result: false, error: "User not found"});
+        return res.status(400).json({ result: false, error: "User not found" });
     }
 
     //const tweet = 
