@@ -29,7 +29,7 @@ router.post("/new", async (req, res) => {
 
 router.delete("/delete/:tweetid", async (req, res) => {
     const { token } = req.body;
-    const { tweetId } = req.params;
+    const { tweetid } = req.params;
 
     if (!token) {
         return res.status(400).json({ result: false, error: "Missing token" });
@@ -41,9 +41,18 @@ router.delete("/delete/:tweetid", async (req, res) => {
         return res.status(400).json({ result: false, error: "User not found" });
     }
 
-    //const tweet = 
+    const tweet = await Tweet.findById(tweetid);
+    if (!tweet) {
+        return res.status(404).json({ result: false, error: "Tweet not found" });
+    }
 
+    if (tweet.author.toString() !== user._id.toString()) {
+        return res.status(401).json({ result: false, error: "Unauthorized: not your tweet" });
+    }
 
-})
+    await Tweet.findByIdAndDelete(tweetid);
+
+    res.json({ result: true, message: "Tweet deleted successfully" });
+});
 
 module.exports = router;
