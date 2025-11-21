@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const Trend = require("../models/Trend");
+const Tweet = require("../models/Tweet");
 
 router.get("/all", async (req, res) => {
     try {
@@ -22,8 +23,9 @@ router.get("/all", async (req, res) => {
     }
 })
 
-router.get("tweets/:name", async (req, res) => {
+router.get("/tweets/:name", async (req, res) => {
     try {
+        const trendName = req.params.name;
         const trend = await Trend.findOne({ name: trendName })
 
         if (!trend) {
