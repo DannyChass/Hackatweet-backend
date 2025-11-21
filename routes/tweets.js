@@ -25,7 +25,7 @@ router.post("/new", async (req, res) => {
 
     await newTweet.save();
 
-    if (    (trends)) {
+    if ((trends)) {
         for (let t of trends) {
             const trendName = t.trim().toLowerCase();
 
@@ -73,10 +73,23 @@ router.delete("/delete/:tweetid", async (req, res) => {
         return res.status(401).json({ result: false, error: "Unauthorized: not your tweet" });
     }
 
+    const trends = await Trend.find({ tweets: tweetid });
+
+    for (let trend of trends) {
+        trend.tweets = trend.tweets.filter(id => id.toString() != tweetid);
+
+        await trend.save();
+
+        if (trend.tweet.length == 0) {
+            await Trend.findByIdAndDelete(trend._id);
+        }
+    }
+
     await Tweet.findByIdAndDelete(tweetid);
 
     res.json({ result: true, message: "Tweet deleted successfully" });
 });
+
 router.get('/all', async (req, res) => {
     try {
         const tweets = await Tweet.find()
