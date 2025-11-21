@@ -87,7 +87,11 @@ router.delete("/delete/:tweetid", async (req, res) => {
 
     await Tweet.findByIdAndDelete(tweetid);
 
-    res.json({ result: true, message: "Tweet deleted successfully" });
+    res.json({
+        result: true,
+        message: "Tweet deleted successfully",
+        deletedTweetId: tweetid
+    });
 });
 
 router.get('/all', async (req, res) => {
