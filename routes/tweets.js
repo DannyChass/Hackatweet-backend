@@ -61,6 +61,7 @@ router.get('/all', async (req, res) => {
 
         const formattedTweets = tweets.map(t => ({
             id: t._id,
+            firstname : t.author.firstname,
             author: t.author.username,
             content: t.content,
             date: t.date,
