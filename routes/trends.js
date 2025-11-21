@@ -22,4 +22,29 @@ router.get("/all", async (req, res) => {
     }
 })
 
+router.get("tweets/:name", async (req, res) => {
+    try {
+        const trend = await Trend.findOne({ name: trendName })
+
+        if (!trend) {
+            return res.json({ result: false, error: "Trend not found" });
+        }
+
+        const tweets = await Tweet.find({ _id: { $in: trend.tweets } }).populate("author", "username firstname").sort({ date: -1 });
+
+        const formattedTweets = tweets.map(t => ({
+            id: t._id,
+            content: t.content,
+            date: t.date,
+            author: t.author.username,
+            firstname: t.author.firstname,
+        }));
+
+        res.json({ result: true, tweets: formattedTweets });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ result: false, error: "Server error" });
+    }
+})
+
 module.exports = router;
