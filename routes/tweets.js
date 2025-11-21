@@ -57,18 +57,18 @@ router.delete("/delete/:tweetid", async (req, res) => {
 
 router.get('/all', async (req, res) => {
     try {
-        const tweets = await Tweet.find().populate("author", "username").sort({ date: -1 });
+        const tweets = await Tweet.find()..populate("author", "username firstname").sort({ date: -1 });
 
         const formattedTweets = tweets.map(t => ({
             id: t._id,
-            firstname : t.author.firstname,
+            firstname: t.author.firstname,
             author: t.author.username,
             content: t.content,
             date: t.date,
             likes: t.usersWhoLiked.length,
         }));
 
-        res.json({result: true, tweets: formattedTweets})
+        res.json({ result: true, tweets: formattedTweets })
     } catch (error) {
         res.status(500).json({ result: false, error: "Server error" });
     }
