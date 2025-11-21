@@ -3,9 +3,10 @@ const router = express.Router();
 
 const Tweet = require("../models/Tweet");
 const User = require("../models/User");
+const Trend = require("../models/Trend");
 
 router.post("/new", async (req, res) => {
-    const { token, content } = req.body;
+    const { token, content, trends } = req.body;
 
     if (!token || !content) {
         return res.status(400).json({ result: false, error: "Missing fields" });
@@ -23,6 +24,28 @@ router.post("/new", async (req, res) => {
     });
 
     await newTweet.save();
+
+    if (    (trends)) {
+        for (let t of trends) {
+            const trendName = t.trim().toLowerCase();
+
+            if (!trendName) continue;
+
+            let trend = await Trend.findOne({ name: trendName });
+
+            if (!trend) {
+                trend = new Trend({
+                    name: trendName, tweets: []
+                })
+            }
+
+            if (!trend.tweets.includes(newTweet._id)) {
+                trend.tweets.push(newTweet._id);
+            }
+
+            await trend.save();
+        }
+    }
 
     res.json({ result: true, tweet: { id: newTweet._id, author: user.username, content: newTweet.content, date: newTweet.date } });
 });
