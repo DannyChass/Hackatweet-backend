@@ -47,7 +47,7 @@ router.post("/new", async (req, res) => {
         }
     }
 
-    res.json({ result: true, tweet: { id: newTweet._id, author: user.username, content: newTweet.content, date: newTweet.date } });
+    res.json({ result: true, tweet: { id: newTweet._id, firstname : user.firstname, author: user.username,  content: newTweet.content, date: newTweet.date } });
 });
 
 router.delete("/delete/:tweetid", async (req, res) => {
