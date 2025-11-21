@@ -21,3 +21,5 @@ router.get("/all", async (req, res) => {
         res.status(500).json({ result: false, error: "Server error" });
     }
 })
+
+module.exports = router;
