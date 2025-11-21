@@ -57,7 +57,7 @@ router.delete("/delete/:tweetid", async (req, res) => {
 
 router.get('/all', async (req, res) => {
     try {
-        const tweets = await Tweet.find()..populate("author", "username firstname").sort({ date: -1 });
+        const tweets = await Tweet.find()..populate("author", "username", "firstname").sort({ date: -1 });
 
         const formattedTweets = tweets.map(t => ({
             id: t._id,
